@@ -1,4 +1,5 @@
 using BlazorThemeIntegeration.Data;
+using ElectronNET.API;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -8,6 +9,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+builder.Services.AddElectron();
+builder.WebHost.UseElectron(args);
+
+if (HybridSupport.IsElectronActive)
+{
+    // Open the Electron-Window here
+    Task.Run(async () => {
+        var window = await Electron.WindowManager.CreateWindowAsync();
+    });
+}
 
 var app = builder.Build();
 
